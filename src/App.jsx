@@ -1,14 +1,21 @@
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function App() {
   // const [count, setCount] = useState(0);
   const [name, setName] = useState("");
   const [show, setShow] = useState(false)
 
+  const timeOut = useRef(null)
+
+
   const handleButton = () => {
+    if (timeOut.current) {
+      clearTimeout(timeOut.current)
+    }
+
     setShow(true)
-    setTimeout(() => {
+    timeOut.current = setTimeout(() => {
       setShow(false)
       setName("")
     }, 2000)
