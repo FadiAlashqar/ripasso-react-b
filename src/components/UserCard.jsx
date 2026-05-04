@@ -1,0 +1,18 @@
+import React from 'react'
+
+const userCard = ({ name, age }) => {
+    return (
+        <div className="card">
+            <div className="card-body d-flex justify-content-center flex-column align-items-center">
+                <div className="card-title">
+                    <span className='fw-bold'>{name}</span>
+                </div>
+                <div className="card-text">
+                    <span>{age}</span>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default userCard
