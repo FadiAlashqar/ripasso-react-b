@@ -47,18 +47,60 @@ function App() {
   //   });
   // };
 
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
+
+  // useEffect(() => {
+  //   let timer;
+  //   if (show) {
+  //     timer = setTimeout(() => {
+  //       setShow(false);
+  //     }, 2000);
+  //   }
+
+  //   return () => clearTimeout(timer)
+  // }, [show]);
+
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [newError, setNewError] = useState(null)
+
+  console.log(data)
 
   useEffect(() => {
-    let timer;
-    if (show) {
-      timer = setTimeout(() => {
-        setShow(false);
-      }, 2000);
+
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const obj = await response.json()
+        setData(obj)
+
+      } catch (error) {
+        setNewError(error.message || "Something went wrong")
+      } finally {
+        setLoading(false)
+      }
     }
 
-    return () => clearTimeout(timer)
-  }, [show]);
+    fetchData()
+
+  }, [])
+
+  const renderData = () => {
+    if (!loading && !newError && data.length === 0) {
+      return <p>No data Found</p>
+    }
+    else if (!loading && !newError) {
+      return data.map((d) => {
+        return <div className="col-4 mt-2" key={d.id}>
+          <UserCard
+            name={d.name}
+            email={d.email}
+          />
+        </div>
+      })
+    }
+  }
 
   return (
     // <div>
@@ -114,11 +156,23 @@ function App() {
     //     </div>
     //   </div>
     // </div >
+    // <div>
+    //   <button onClick={() => setShow(true)}>
+    //     Mostra messaggio
+    //   </button>
+    //   {show && <h2>Ciao!</h2>}
+    // </div>
     <div>
-      <button onClick={() => setShow(true)}>
-        Mostra messaggio
-      </button>
-      {show && <h2>Ciao!</h2>}
+      <h1>My data</h1>
+      {loading && <span>Loading...</span>}
+      {newError && <p className="text-danger">{newError}</p>}
+      <div className="container">
+        <div className="row">
+          {
+            renderData()
+          }
+        </div>
+      </div>
     </div>
   );
 }
