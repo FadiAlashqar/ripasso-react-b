@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import UserCard from "./components/UserCard";
+import useFetch from "./hooks/useFetch";
 
 function App() {
   // const [count, setCount] = useState(0);
@@ -60,31 +61,7 @@ function App() {
   //   return () => clearTimeout(timer)
   // }, [show]);
 
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [newError, setNewError] = useState(null)
-
-  console.log(data)
-
-  useEffect(() => {
-
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const response = await fetch('https://jsonplaceholder.typicode.com/users');
-        const obj = await response.json()
-        setData(obj)
-
-      } catch (error) {
-        setNewError(error.message || "Something went wrong")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-
-  }, [])
+  const { data, loading, newError, } = useFetch('https://jsonplaceholder.typicode.com/users')
 
   const renderData = () => {
     if (!loading && !newError && data.length === 0) {
